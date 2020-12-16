@@ -11,13 +11,11 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
 const SWIPE_OUT_DURATION = 250;
 
-const Deck = ({ data, renderCard }) => {
+const Deck = ({ data, renderCard, onSwipeLeft, onSwipeRight }) => {
   const position = new Animated.ValueXY(0, 0);
 
-  const resetPosition = () => {
-    Animated.spring(position, {
-      toValue: { x: 0, y: 0 }
-    }).start();
+  const onSwipeComplete = direction => {
+    direction === "right" ? onSwipeRight() : onSwipeLeft();
   };
 
   const forceSwipe = direction => {
@@ -28,6 +26,12 @@ const Deck = ({ data, renderCard }) => {
         y: 0
       },
       duration: SWIPE_OUT_DURATION
+    }).start(() => onSwipeComplete(direction));
+  };
+
+  const resetPosition = () => {
+    Animated.spring(position, {
+      toValue: { x: 0, y: 0 }
     }).start();
   };
 
