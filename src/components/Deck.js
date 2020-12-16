@@ -33,6 +33,10 @@ const Deck = ({
     LayoutAnimation.spring();
   }, [currentIndex]);
 
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [data]);
+
   const onSwipeComplete = direction => {
     const item = data[currentIndex];
 
