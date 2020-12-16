@@ -82,22 +82,28 @@ const Deck = ({
       return <View>{renderNoMoreCards()}</View>;
     }
 
-    return data.map((x, index) => {
-      if (index < currentIndex) return null;
+    return data
+      .map((x, index) => {
+        if (index < currentIndex) return null;
 
-      if (index === currentIndex) {
+        if (index === currentIndex) {
+          return (
+            <Animated.View
+              key={x.id}
+              style={[getCardStyle(), styles.cardStyle]}
+              {...panResponder.panHandlers}
+            >
+              {renderCard(x)}
+            </Animated.View>
+          );
+        }
         return (
-          <Animated.View
-            key={x.id}
-            style={getCardStyle()}
-            {...panResponder.panHandlers}
-          >
+          <Animated.View style={styles.cardStyle} key={x.id}>
             {renderCard(x)}
           </Animated.View>
         );
-      }
-      return renderCard(x);
-    });
+      })
+      .reverse();
   };
 
   return <View>{renderCards()}</View>;
@@ -115,4 +121,9 @@ Deck.propTypes = {
   onSwipeRight: PropTypes.func,
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  cardStyle: {
+    position: "absolute",
+    width: SCREEN_WIDTH,
+  },
+});
