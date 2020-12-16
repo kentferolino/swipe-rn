@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   StyleSheet,
@@ -7,6 +7,8 @@ import {
   PanResponder,
   Dimensions,
   Text,
+  LayoutAnimation,
+  UIManager,
 } from "react-native";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -23,6 +25,13 @@ const Deck = ({
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const position = new Animated.ValueXY(0, 0);
+
+  useEffect(() => {
+    UIManager.setLayoutAnimationEnabledExperimental &&
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+
+    LayoutAnimation.spring();
+  }, [currentIndex]);
 
   const onSwipeComplete = direction => {
     const item = data[currentIndex];
@@ -98,7 +107,10 @@ const Deck = ({
           );
         }
         return (
-          <Animated.View style={styles.cardStyle} key={x.id}>
+          <Animated.View
+            style={[styles.cardStyle, { top: 10 * (index - currentIndex) }]}
+            key={x.id}
+          >
             {renderCard(x)}
           </Animated.View>
         );
